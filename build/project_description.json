@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "2024_Tracker",
-    "project_version":    "d650ba0-dirty",
+    "project_version":    "9c8a0a6-dirty",
     "project_path":       "C:/Users/bddun/2024_Tracker",
     "idf_path":           "C:/Users/bddun/esp/v5.2.2/esp-idf",
     "build_dir":          "C:/Users/bddun/2024_Tracker/build",

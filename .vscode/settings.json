@@ -11,7 +11,11 @@
     "idf.openOcdConfigs": [
         "board/esp32c3-ftdi.cfg"
     ],
-    "idf.portWin": "COM10",
+    "idf.portWin": "COM4",
     "idf.pythonBinPathWin": "C:\\Users\\bddun\\.espressif\\python_env\\idf5.2_py3.11_env\\Scripts\\python.exe",
-    "idf.toolsPathWin": "C:\\Users\\bddun\\.espressif"
+    "idf.toolsPathWin": "C:\\Users\\bddun\\.espressif",
+    "idf.flashType": "UART",
+    "files.associations": {
+        "freertos.h": "c"
+    }
 }
