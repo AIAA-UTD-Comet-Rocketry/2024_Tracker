@@ -16,6 +16,14 @@
     "idf.toolsPathWin": "C:\\Users\\bddun\\.espressif",
     "idf.flashType": "UART",
     "files.associations": {
-        "freertos.h": "c"
+        "freertos.h": "c",
+        "esp_flash.h": "c",
+        "task.h": "c",
+        "esp_system.h": "c",
+        "esp_attr.h": "c",
+        "sdkconfig.h": "c",
+        "inttypes.h": "c",
+        "tinygps++.h": "c",
+        "esp_chip_info.h": "c"
     }
 }

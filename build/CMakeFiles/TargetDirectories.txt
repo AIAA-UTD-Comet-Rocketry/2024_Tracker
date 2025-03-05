@@ -635,3 +635,10 @@ C:/Users/bddun/2024_Tracker/build/esp-idf/main/CMakeFiles/list_install_component
 C:/Users/bddun/2024_Tracker/build/esp-idf/main/CMakeFiles/install.dir
 C:/Users/bddun/2024_Tracker/build/esp-idf/main/CMakeFiles/install/local.dir
 C:/Users/bddun/2024_Tracker/build/esp-idf/main/CMakeFiles/install/strip.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/__idf_TinyGPS++.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/edit_cache.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/rebuild_cache.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/list_install_components.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/install.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/install/local.dir
+C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/CMakeFiles/install/strip.dir

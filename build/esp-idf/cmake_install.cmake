@@ -412,3 +412,8 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/bddun/2024_Tracker/build/esp-idf/main/cmake_install.cmake")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("C:/Users/bddun/2024_Tracker/build/esp-idf/TinyGPS++/cmake_install.cmake")
+endif()
+
