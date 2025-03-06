@@ -24,6 +24,7 @@
         "sdkconfig.h": "c",
         "inttypes.h": "c",
         "tinygps++.h": "c",
-        "esp_chip_info.h": "c"
+        "esp_chip_info.h": "c",
+        "cstdint": "c"
     }
 }

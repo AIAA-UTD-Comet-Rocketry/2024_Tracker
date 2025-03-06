@@ -11,6 +11,7 @@
 #include "driver/spi_master.h"
 #include "esp_log.h"
 #include "TinyGPS++.h"
+#include "si4468_defs.h"
 #include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -54,7 +55,7 @@ void gps_uart_init() {
 }
 
 // Function to Initialize SPI for Si4468
-void spi_si4468_init() {
+void spi_radio_bus_init() {
     spi_bus_config_t buscfg = {};  // Initialize to 0
     buscfg.mosi_io_num = SI4468_MOSI;
     buscfg.miso_io_num = SI4468_MISO;
@@ -62,18 +63,7 @@ void spi_si4468_init() {
     buscfg.quadwp_io_num = -1;
     buscfg.quadhd_io_num = -1;
 
-    spi_device_interface_config_t devcfg = {};  // Initialize to 0
-    devcfg.command_bits = 0;
-    devcfg.address_bits = 0;
-    devcfg.dummy_bits = 0;
-    devcfg.mode = 0;
-    devcfg.duty_cycle_pos = 128;
-    devcfg.clock_speed_hz = 4 * 1000 * 1000; // 4MHz
-    devcfg.spics_io_num = SI4468_CS;
-    devcfg.queue_size = 1;
-
     ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO));
-    ESP_ERROR_CHECK(spi_bus_add_device(SPI2_HOST, &devcfg, &si4468_handle));
 
     ESP_LOGI(TAG, "Si4468 SPI Initialized");
 }
@@ -153,7 +143,11 @@ extern "C" void app_main(void)
     ESP_LOGI(TAG, "Initializing GPS and Si4468 Transceiver");
 
     gps_uart_init();
-    spi_si4468_init();
+    spi_radio_bus_init();
+
+    si4468_init(SPI2_HOST, SI4468_CS);
+    si4468_set_frequency(144000000);  // Set 144 MHz
+    si4468_set_power(127);  // 127 = ~20dBm
 
     xTaskCreate(gps_task, "gps_task", 4096, NULL, 5, NULL);
 }
