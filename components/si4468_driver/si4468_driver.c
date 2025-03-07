@@ -97,7 +97,7 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
     }
 
     //used param freq_hz
-    //cmd = {0x11, 0x40, 0x08, 0x00, 0x3A, 0x01, 0x99, 0x9A, 0x22, 0x22, 0x20, 0xFF}
+    //cmd = {0x11, 0x40, 0x08, 0x00, 0x3A, 0x01, 0x99, 0x9A, 0x10, 0x62, 0x20, 0xFF}
     // 0x11 => set param
     // 0x40 => freq group
     // 0x08, 0x00 => change 8 params starting from begining of group
@@ -105,14 +105,14 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
     // 0x09 => PLL frac div [19:16]
     // 0x99 => PLL frac div [15:8]
     // 0x9A => PLL frac div [7:0]
-    // 0x04 => Channel Size [15:8]
-    // 0x19 => Channel Size [7:0]
+    // 0x10 => Channel Size [15:8]
+    // 0x62 => Channel Size [7:0]
     // 0x20 => Recommended Calibration Constant
     // 0xFF => Default Calibration Value
     // frequency formula: (int + frac / 2^19) * ((presc * 30Mhz)/odiv) = channel
     // real freq formula: (57 + 629146 / 2^19) * ((2 * 30Mhz)/24) = 145.500002 MHz
     // channel step size: (2^19 * odiv * target)/(presc * 30MHz) = Channel Size [15:0]
-    // channel real size: (2^19 * 24 * 5kHz)/(2 * 30MHz) = 1049 = 0x0419 (actual 5.002 kHz)
+    // channel real size: (2^19 * 24 * 20kHz)/(2 * 30MHz) = 1049 = 0x0419 (actual 5.002 kHz)
     //
     // For us ***CENTER_FREQ = BASE + CHAN_NUM * CHAN_SIZE = 145.500 + N * 0.005 MHz***
     uint8_t freq_cmd[] = {RF_FREQ_CONTROL_INTE_8};
@@ -125,6 +125,7 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
 // Function to set power output (20 dBm)
 esp_err_t si4468_set_power(uint8_t power_level)
 {
-    uint8_t pa_cmd[] = {0x22, power_level};  // PA_PWR_LVL command
+    //this is just default values for power
+    uint8_t pa_cmd[] = {0x11, 0x22, 0x02, 0x00, 0x08, 0x7F};
     return si4468_send_cmd(pa_cmd, sizeof(pa_cmd));
 }
