@@ -398,7 +398,7 @@
  //   FREQ_CONTROL_W_SIZE - Set window gating period (in number of crystal reference clock cycles) for counting VCO frequency during calibration.
  //   FREQ_CONTROL_VCOCNT_RX_ADJ - Adjust target count for VCO calibration in RX mode.
  */
- #define RF_FREQ_CONTROL_INTE_8 0x11, 0x40, 0x08, 0x00, 0x39, 0x09, 0x99, 0x9A, 0x10, 0x62, 0x20, 0xFF
+ #define RF_FREQ_CONTROL_INTE_8 0x11, 0x40, 0x08, 0x00, 0x47, 0x0E, 0x00, 0x00, 0x14, 0x7B, 0x20, 0xFF
  
  /*
  // Command:                  RF_START_RX

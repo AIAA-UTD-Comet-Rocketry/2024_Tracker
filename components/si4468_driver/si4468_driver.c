@@ -97,22 +97,22 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
     }
 
     //used param freq_hz
-    //cmd = {0x11, 0x40, 0x08, 0x00, 0x3A, 0x01, 0x99, 0x9A, 0x10, 0x62, 0x20, 0xFF}
+    //cmd = {0x11, 0x40, 0x08, 0x00, 0x47, 0x0E, 0x00, 0x00, 0x14, 0x7B, 0x20, 0xFF}
     // 0x11 => set param
     // 0x40 => freq group
     // 0x08, 0x00 => change 8 params starting from begining of group
-    // 0x39 => PLL div by int 57
-    // 0x09 => PLL frac div [19:16]
-    // 0x99 => PLL frac div [15:8]
-    // 0x9A => PLL frac div [7:0]
-    // 0x10 => Channel Size [15:8]
-    // 0x62 => Channel Size [7:0]
+    // 0x47 => PLL div by int 71
+    // 0x0E => PLL frac div [19:16]
+    // 0x00 => PLL frac div [15:8]
+    // 0x00 => PLL frac div [7:0]
+    // 0x14 => Channel Size [15:8]
+    // 0x7B => Channel Size [7:0]
     // 0x20 => Recommended Calibration Constant
     // 0xFF => Default Calibration Value
-    // frequency formula: (int + frac / 2^19) * ((presc * 30Mhz)/odiv) = channel
-    // real freq formula: (57 + 629146 / 2^19) * ((2 * 30Mhz)/24) = 145.500002 MHz
-    // channel step size: (2^19 * odiv * target)/(presc * 30MHz) = Channel Size [15:0]
-    // channel real size: (2^19 * 24 * 20kHz)/(2 * 30MHz) = 1049 = 0x0419 (actual 5.002 kHz)
+    // frequency formula: (int + frac / 2^19) * ((presc * 24Mhz)/odiv) = channel
+    // real freq formula: (71 + 629146 / 2^19) * ((2 * 24Mhz)/24) = 145.500002 MHz
+    // channel step size: (2^19 * odiv * target)/(presc * 24MHz) = Channel Size [15:0]
+    // channel real size: (2^19 * 24 * 20kHz)/(2 * 24MHz) = 5243 = 0x147B (actual 20.0005 kHz)
     //
     // For us ***CENTER_FREQ = BASE + CHAN_NUM * CHAN_SIZE = 145.500 + N * 0.005 MHz***
     uint8_t freq_cmd[] = {RF_FREQ_CONTROL_INTE_8};
@@ -126,6 +126,7 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
 esp_err_t si4468_set_power(uint8_t power_level)
 {
     //this is just default values for power
+    //should make a compile option for freq calibration at lower power
     uint8_t pa_cmd[] = {0x11, 0x22, 0x02, 0x00, 0x08, 0x7F};
     return si4468_send_cmd(pa_cmd, sizeof(pa_cmd));
 }
