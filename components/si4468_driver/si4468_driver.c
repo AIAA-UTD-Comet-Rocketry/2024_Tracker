@@ -36,6 +36,27 @@ static esp_err_t si4468_wait_cts()
 
     return ESP_OK;
 }
+esp_err_t si4468_write_tx_fifo(uint8_t *data, size_t len) {
+    uint8_t cmd[65] = {0x66}; // WRITE_TX_FIFO (max 64 bytes payload)
+    if (len > 64) return ESP_ERR_INVALID_SIZE;
+    memcpy(cmd + 1, data, len);
+    return si4468_send_cmd(cmd, len + 1);
+}
+
+esp_err_t si4468_read_rx_fifo(uint8_t *buf, size_t len) {
+    uint8_t cmd = 0x77; // READ_RX_FIFO
+    spi_transaction_t t = {};
+    t.length = 8;
+    t.tx_buffer = &cmd;
+    t.rx_buffer = NULL;
+    esp_err_t ret = spi_device_transmit(si4468_spi, &t);
+    if (ret != ESP_OK) return ret;
+
+    t.length = len * 8;
+    t.tx_buffer = NULL;
+    t.rx_buffer = buf;
+    return spi_device_transmit(si4468_spi, &t);
+}
 
 // Function to send a command to Si4468
 esp_err_t si4468_send_cmd(uint8_t *cmd, size_t cmd_len)
@@ -120,6 +141,11 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
     err = si4468_send_cmd(freq_cmd, sizeof(freq_cmd));
 
     return err;
+}
+
+esp_err_t si4468_change_state(uint8_t next_state) {
+    uint8_t cmd[] = {0x34, next_state};
+    return si4468_send_cmd(cmd, sizeof(cmd));
 }
 
 // Function to set power output (20 dBm)
