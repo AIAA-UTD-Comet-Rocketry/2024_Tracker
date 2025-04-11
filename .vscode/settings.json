@@ -7,7 +7,7 @@
         "IDF_CCACHE_ENABLE": "1",
         "ESP_ROM_ELF_DIR": "C:\\Users\\bddun\\.espressif\\tools\\esp-rom-elfs\\20230320/"
     },
-    "idf.espIdfPathWin": "C:\\Users\\bddun\\esp\\v5.2.2\\esp-idf",
+    "idf.espIdfPathWin": "C:\\Users\\bddun\\esp\\v5.4\\esp-idf",
     "idf.openOcdConfigs": [
         "board/esp32c3-ftdi.cfg"
     ],
@@ -25,6 +25,16 @@
         "inttypes.h": "c",
         "tinygps++.h": "c",
         "esp_chip_info.h": "c",
-        "cstdint": "c"
-    }
+        "cstdint": "c",
+        "si446x_spi.h": "c",
+        "string.h": "c",
+        "si446x_config.h": "c",
+        "si4468_driver.h": "c",
+        "si4468_defs.h": "c",
+        "cstddef": "c",
+        "limits": "c",
+        "gpio.h": "c",
+        "ets_sys.h": "c"
+    },
+    "idf.pythonInstallPath": "C:\\Users\\bddun\\.espressif\\tools\\idf-python\\3.11.2\\python.exe"
 }

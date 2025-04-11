@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <string.h>
-#include "driver/spi_master.h"
+//#include "driver/spi_master.h"
 #include "sdkconfig.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -11,6 +11,8 @@
 #include "driver/gpio.h"
 
 static const char *TAG = "SI4468";
+
+esp_err_t si4468_send_cmd(uint8_t *cmd, size_t cmd_len);
 
 // SPI Handle
 static spi_device_handle_t si4468_spi;

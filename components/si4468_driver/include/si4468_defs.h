@@ -9,6 +9,7 @@
  #ifndef SI446X_DEFS_H_
  #define SI446X_DEFS_H_
 
+#include "driver/gpio.h"
 #include "driver/spi_master.h"
 #include "esp_err.h"
 

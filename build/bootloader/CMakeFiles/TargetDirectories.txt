@@ -4,14 +4,15 @@ C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/save-defconfig.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/gen_project_binary.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/app.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/erase_flash.dir
-C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/uf2.dir
-C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/uf2-app.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/merge-bin.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/monitor.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/_project_elf_src.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/bootloader.elf.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/size.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/size-files.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/size-components.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/uf2.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/uf2-app.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/edit_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/CMakeFiles/rebuild_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/CMakeFiles/edit_cache.dir
@@ -50,6 +51,8 @@ C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/efuse/CMakeFiles/show_efuse
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/efuse/CMakeFiles/efuse_test_table.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/efuse/CMakeFiles/edit_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/efuse/CMakeFiles/rebuild_cache.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_security/CMakeFiles/edit_cache.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_security/CMakeFiles/rebuild_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_system/CMakeFiles/__idf_esp_system.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_system/CMakeFiles/edit_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_system/CMakeFiles/rebuild_cache.dir
@@ -58,6 +61,8 @@ C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_hw_support/CMakeFiles/e
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_hw_support/CMakeFiles/rebuild_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_hw_support/port/esp32c3/CMakeFiles/edit_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_hw_support/port/esp32c3/CMakeFiles/rebuild_cache.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_hw_support/lowpower/CMakeFiles/edit_cache.dir
+C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_hw_support/lowpower/CMakeFiles/rebuild_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_common/CMakeFiles/__idf_esp_common.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_common/CMakeFiles/edit_cache.dir
 C:/Users/bddun/2024_Tracker/build/bootloader/esp-idf/esp_common/CMakeFiles/rebuild_cache.dir

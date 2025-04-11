@@ -145,7 +145,7 @@ extern "C" void app_main(void)
     gps_uart_init();
     spi_radio_bus_init();
 
-    si4468_init(SPI2_HOST, SI4468_CS);
+    si4468_init(SPI2_HOST, (gpio_num_t)SI4468_CS);
     si4468_set_frequency(144000000);  // Set 144 MHz
     si4468_set_power(127);  // 127 = ~20dBm
 
