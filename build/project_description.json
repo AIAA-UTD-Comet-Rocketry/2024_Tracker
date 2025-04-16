@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "2024_Tracker",
-    "project_version":    "3d117a1-dirty",
+    "project_version":    "6de73a1-dirty",
     "project_path":       "C:/Users/bddun/2024_Tracker",
     "idf_path":           "C:/Users/bddun/esp/v5.4/esp-idf",
     "build_dir":          "C:/Users/bddun/2024_Tracker/build",
@@ -40,7 +40,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "C:/Users/bddun/2024_Tracker/build/esp-idf/SI4463/libSI4463.a",
-            "sources": [ "C:/Users/bddun/2024_Tracker/components/SI4463/radio_comm.c", "C:/Users/bddun/2024_Tracker/components/SI4463/radio_hal.c", "C:/Users/bddun/2024_Tracker/components/SI4463/si446x_api_lib.c", "C:/Users/bddun/2024_Tracker/components/SI4463/si446x_nirq.c", "C:/Users/bddun/2024_Tracker/components/SI4463/Si446x_spi.c", "C:/Users/bddun/2024_Tracker/components/SI4463/Si446x.c" ],
+            "sources": [ "C:/Users/bddun/2024_Tracker/components/SI4463/radio_comm.c", "C:/Users/bddun/2024_Tracker/components/SI4463/si446x_api_lib.c", "C:/Users/bddun/2024_Tracker/components/SI4463/Si446x_spi.c", "C:/Users/bddun/2024_Tracker/components/SI4463/Si446x.c" ],
             "include_dirs": [ "include" ]
         },
         "TinyGPS++": {

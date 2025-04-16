@@ -11,6 +11,7 @@
 #ifndef _RADIO_COMM_H_
 #define _RADIO_COMM_H_
 
+#include <stdint.h>
 
                 /* ======================================= *
                  *              I N C L U D E              *
@@ -28,26 +29,22 @@
                  *     G L O B A L   V A R I A B L E S     *
                  * ======================================= */
 
-extern SEGMENT_VARIABLE(radioCmd[16u], U8, SEG_XDATA);
+extern uint8_t radioCmd[16u];
 
 
                 /* ======================================= *
                  *  F U N C T I O N   P R O T O T Y P E S  *
                  * ======================================= */
 
-#if (defined SILABS_RADIO_SI446X) || (defined SILABS_RADIO_SI4455)
-  U8 radio_comm_GetResp(U8 byteCount, U8* pData);
-  void radio_comm_SendCmd(U8 byteCount, U8* pData);
-  void radio_comm_ReadData(U8 cmd, BIT pollCts, U8 byteCount, U8* pData);
-  void radio_comm_WriteData(U8 cmd, BIT pollCts, U8 byteCount, U8* pData);
-#elif (defined SILABS_RADIO_SI4012)
-  U8 radio_comm_GetResp(U8 byteCount, U8* pData);
-  U8 radio_comm_SendCmd(U8 byteCount, U8* pData);
-#endif
 
-U8 radio_comm_PollCTS(void);
-U8 radio_comm_SendCmdGetResp(U8 cmdByteCount, U8* pCmdData, \
-                             U8 respByteCount, U8* pRespData);
+uint8_t radio_comm_GetResp(uint8_t byteCount, uint8_t* pData);
+void radio_comm_SendCmd(uint8_t byteCount, uint8_t* pData);
+void radio_comm_ReadData(uint8_t cmd, uint8_t pollCts, uint8_t byteCount, uint8_t* pData);
+void radio_comm_WriteData(uint8_t cmd, uint8_t pollCts, uint8_t byteCount, uint8_t* pData);
+
+uint8_t radio_comm_PollCTS(void);
+uint8_t radio_comm_SendCmdGetResp(uint8_t cmdByteCount, uint8_t* pCmdData, \
+                             uint8_t respByteCount, uint8_t* pRespData);
 void radio_comm_ClearCTS(void);
 
 #endif //_RADIO_COMM_H_

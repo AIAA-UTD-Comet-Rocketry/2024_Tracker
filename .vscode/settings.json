@@ -34,7 +34,19 @@
         "cstddef": "c",
         "limits": "c",
         "gpio.h": "c",
-        "ets_sys.h": "c"
+        "ets_sys.h": "c",
+        "radio_config.h": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "span": "c",
+        "format": "c",
+        "stdarg.h": "c",
+        "bsp.h": "c",
+        "stdint.h": "c",
+        "si446x_api_lib.h": "c",
+        "si446x_patch.h": "c",
+        "radio_comm.h": "c"
     },
     "idf.pythonInstallPath": "C:\\Users\\bddun\\.espressif\\tools\\idf-python\\3.11.2\\python.exe"
 }

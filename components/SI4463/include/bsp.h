@@ -23,27 +23,17 @@
 /*            Application specific includes                               */
 /*------------------------------------------------------------------------*/
 
-#include "drivers\compiler_defs.h"
-#include "platform_defs.h"
-#include "hardware_defs.h"
+//#include "application\application_defs.h"
 
-#include "application\application_defs.h"
-
-#include "drivers\spi.h"
-#include "drivers\hmi.h"
-#include "application\isr.h"
 #include "radio_config.h"
-#include "application\radio.h"
-#include "application\sample_code_func.h"
+//#include "application\radio.h"
+//#include "application\sample_code_func.h"
 
-#include "radio_hal.h"
 #include "radio_comm.h"
 
-#ifdef SILABS_RADIO_SI446X
-#include "drivers\radio\Si446x\si446x_api_lib.h"
-#include "drivers\radio\Si446x\si446x_defs.h"
-#include "drivers\radio\Si446x\si446x_nirq.h"
-//#include "drivers\radio\Si446x\si446x_patch.h"
-#endif
+#include "si446x_api_lib.h"
+#include "si446x_defs.h"
+#include "si446x_patch.h"
+#include "si446x_cmd.h"
 
 #endif //BSP_H
