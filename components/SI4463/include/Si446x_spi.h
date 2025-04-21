@@ -19,7 +19,8 @@
 #include "freertos/task.h"
 #include "driver/gpio.h"
 
-esp_err_t si4463_init(spi_host_device_t host, gpio_num_t cs_pin);
+esp_err_t si4463_spi_init(spi_host_device_t host);
 esp_err_t si4463_send_cmd(uint8_t *cmd, size_t cmd_len);
+esp_err_t si4463_read_bytes(uint8_t *pData, size_t data_len);
 
 #endif /* SI446X_SPI_H_ */

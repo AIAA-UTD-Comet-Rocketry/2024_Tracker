@@ -12,6 +12,7 @@
 #ifndef _SI446X_API_LIB_H_
 #define _SI446X_API_LIB_H_
 
+#include "bsp.h"
 #include <stdint.h>
 
 extern union si446x_cmd_reply_union Si446xCmd;
@@ -28,6 +29,10 @@ enum
     SI446X_PATCH_FAIL,
     SI446X_COMMAND_ERROR
 };
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Minimal driver support functions */
 void si446x_reset(void);
@@ -102,5 +107,8 @@ void si446x_change_state(uint8_t NEXT_STATE1);
   #endif
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif //_SI446X_API_LIB_H_

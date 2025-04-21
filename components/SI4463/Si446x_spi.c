@@ -8,6 +8,7 @@ static const char *TAG = "SI4463";
 // SPI Handle
 static spi_device_handle_t si4463_spi;
 
+
 // function to check CTS (Clear to Send)
 esp_err_t si4463_wait_cts(void* out, uint8_t outLen)
 {
@@ -38,7 +39,25 @@ esp_err_t si4463_wait_cts(void* out, uint8_t outLen)
     return ESP_OK;
 }
 
-// Function to send a command to Si4468
+
+// Function to send a command to Si4463
+esp_err_t si4463_read_bytes(uint8_t *pData, size_t data_len)
+{
+    uint8_t dummy[data_len]; // Sending 0xFF do avoid radio state hazards
+    memset(dummy, 0xFF, sizeof(dummy));
+    spi_transaction_t t = {};
+    memset(&t, 0, sizeof(t));
+    t.length = data_len * 8;
+    t.tx_buffer = dummy;
+    t.rx_buffer = pData;
+
+    esp_err_t ret = spi_device_transmit(si4463_spi, &t);
+
+    return ret;
+}
+
+
+// Function to send a command to Si4463
 esp_err_t si4463_send_cmd(uint8_t *cmd, size_t cmd_len)
 {
     spi_transaction_t t = {};
@@ -51,8 +70,9 @@ esp_err_t si4463_send_cmd(uint8_t *cmd, size_t cmd_len)
     return ret;
 }
 
+
 // Function to initialize Si4468
-esp_err_t si4463_init(spi_host_device_t host, gpio_num_t cs_pin)
+esp_err_t si4463_spi_init(spi_host_device_t host)
 {
     // SPI Device Configuration
     spi_device_interface_config_t devcfg = {};
@@ -61,7 +81,7 @@ esp_err_t si4463_init(spi_host_device_t host, gpio_num_t cs_pin)
     devcfg.dummy_bits = 0;
     devcfg.mode = 0;
     devcfg.clock_speed_hz = 10000000;  // 10 MHz
-    devcfg.spics_io_num = cs_pin;
+    devcfg.spics_io_num = -1;
     devcfg.queue_size = 1;
 
     ESP_ERROR_CHECK(spi_bus_add_device(host, &devcfg, &si4463_spi));

@@ -46,7 +46,8 @@
         "stdint.h": "c",
         "si446x_api_lib.h": "c",
         "si446x_patch.h": "c",
-        "radio_comm.h": "c"
+        "radio_comm.h": "c",
+        "_default_types.h": "c"
     },
     "idf.pythonInstallPath": "C:\\Users\\bddun\\.espressif\\tools\\idf-python\\3.11.2\\python.exe"
 }

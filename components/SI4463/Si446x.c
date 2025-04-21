@@ -18,4 +18,4 @@
 #define	delay_ms(ms)			vTaskDelay(pdMS_TO_TICKS(ms))
 #define delay_us(us)			ets_delay_us(us)
 
-static const uint8_t config[] = RADIO_CONFIGURATION_DATA_ARRAY;
+//static const uint8_t config[] = RADIO_CONFIGURATION_DATA_ARRAY;

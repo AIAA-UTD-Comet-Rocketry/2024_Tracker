@@ -19,7 +19,7 @@ union si446x_cmd_reply_union Si446xCmd;
 uint8_t Pro2Cmd[16];
 
 #ifdef SI446X_PATCH_CMDS
-uint8_t Si446xPatchCommands[][8] = { SI446X_PATCH_CMDS };
+//uint8_t Si446xPatchCommands[][8] = { SI446X_PATCH_CMDS };
 #endif
 
 

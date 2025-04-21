@@ -11,13 +11,15 @@
 #include "driver/spi_master.h"
 #include "esp_log.h"
 #include "TinyGPS++.h"
-#include "si4468_defs.h"
 #include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_chip_info.h"
 #include "esp_flash.h"
 #include "esp_system.h"
+#include "radio_hal.h"
+#include "si446x_api_lib.h"
+#include "radio_config.h"
 
 // Logging TAG
 static const char *TAG = "ESP32-GPS-SI4468";
@@ -28,17 +30,13 @@ static const char *TAG = "ESP32-GPS-SI4468";
 #define GPS_RX_PIN     5  // ESP32 RX (Connect to GPS TX)
 #define BUF_SIZE       1024
 
-// Si4468 SPI Configuration
-#define SI4468_MOSI    23
-#define SI4468_MISO    19
-#define SI4468_SCK     18
-#define SI4468_CS      10
+// Si4463 SPI Configuration
+#define SI4463_MOSI    23
+#define SI4463_MISO    19
+#define SI4463_SCK     18
 
 // TinyGPS++ Instance
 TinyGPSPlus gps;
-
-// SPI Device Handle
-spi_device_handle_t si4468_handle;
 
 // Function to Initialize GPS UART
 void gps_uart_init() {
@@ -54,32 +52,18 @@ void gps_uart_init() {
     uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 }
 
-// Function to Initialize SPI for Si4468
+// Function to Initialize SPI for Si4463
 void spi_radio_bus_init() {
     spi_bus_config_t buscfg = {};  // Initialize to 0
-    buscfg.mosi_io_num = SI4468_MOSI;
-    buscfg.miso_io_num = SI4468_MISO;
-    buscfg.sclk_io_num = SI4468_SCK;
+    buscfg.mosi_io_num = SI4463_MOSI;
+    buscfg.miso_io_num = SI4463_MISO;
+    buscfg.sclk_io_num = SI4463_SCK;
     buscfg.quadwp_io_num = -1;
     buscfg.quadhd_io_num = -1;
 
     ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO));
 
     ESP_LOGI(TAG, "Si4468 SPI Initialized");
-}
-
-// Function to Send Data to Si4468
-void send_si4468(const char *data) {
-    spi_transaction_t trans = {};
-    trans.length = strlen(data) * 8; // Length in bits
-    trans.tx_buffer = data;
-
-    esp_err_t ret = spi_device_transmit(si4468_handle, &trans);
-    if (ret == ESP_OK) {
-        ESP_LOGI(TAG, "Data Sent: %s", data);
-    } else {
-        ESP_LOGE(TAG, "SPI Transmission Failed");
-    }
 }
 
 // Main Task for GPS Data Processing
@@ -95,12 +79,16 @@ void gps_task(void *pvParameters) {
 
         // If new GPS location is available
         if (gps.location.isUpdated()) {
-            char gps_buffer[64];
+            char gps_buffer[64] = {};
             snprintf(gps_buffer, sizeof(gps_buffer), "Lat: %.6f, Lon: %.6f",
                      gps.location.lat(), gps.location.lng());
 
             ESP_LOGI(TAG, "GPS: %s", gps_buffer);
-            send_si4468(gps_buffer);
+            //send_si4468(gps_buffer);
+            si446x_fifo_info(SI446X_CMD_FIFO_INFO_ARG_FIFO_TX_BIT); // Clear fifo ???
+            si446x_get_int_status(0u, 0u, 0u); // Clear pending interrupts ???
+            si446x_write_tx_fifo(64, (uint8_t*)gps_buffer);
+            si446x_start_tx(RADIO_CONFIGURATION_DATA_CHANNEL_NUMBER, 0x30, 0x00); // 0x00 somehow sets length, def not correctly
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000)); // Delay for stability
@@ -136,6 +124,7 @@ void chipIdEcho() {
     printf("Minimum free heap size: %" PRIu32 " bytes\n\n", esp_get_minimum_free_heap_size());
 }
 
+const uint8_t defaultCmds[] = RADIO_CONFIGURATION_DATA_ARRAY;
 extern "C" void app_main(void)
 {
     chipIdEcho();
@@ -144,10 +133,10 @@ extern "C" void app_main(void)
 
     gps_uart_init();
     spi_radio_bus_init();
+    radio_hal_Init(); // Si4463 connection
 
-    si4468_init(SPI2_HOST, (gpio_num_t)SI4468_CS);
-    si4468_set_frequency(144000000);  // Set 144 MHz
-    si4468_set_power(127);  // 127 = ~20dBm
+    si446x_configuration_init(defaultCmds);
+    si446x_get_int_status(0u, 0u, 0u);
 
     xTaskCreate(gps_task, "gps_task", 4096, NULL, 5, NULL);
 }

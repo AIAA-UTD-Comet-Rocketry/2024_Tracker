@@ -30,6 +30,7 @@
 //#include "application\sample_code_func.h"
 
 #include "radio_comm.h"
+#include "radio_hal.h"
 
 #include "si446x_api_lib.h"
 #include "si446x_defs.h"
