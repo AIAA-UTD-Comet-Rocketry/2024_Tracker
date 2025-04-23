@@ -42,7 +42,7 @@
                  *     P U B L I C   F U N C T I O N S     *
                  * ======================================= */
 
-#define SI4463_CS   10
+#define SI4463_CS   3
 #define RADIO_SPI   SPI2_HOST
 
 void radio_hal_Init(void){

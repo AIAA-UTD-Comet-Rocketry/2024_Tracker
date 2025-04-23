@@ -31,9 +31,9 @@ static const char *TAG = "ESP32-GPS-SI4468";
 #define BUF_SIZE       1024
 
 // Si4463 SPI Configuration
-#define SI4463_MOSI    23
-#define SI4463_MISO    19
-#define SI4463_SCK     18
+#define SI4463_MOSI    0
+#define SI4463_MISO    1
+#define SI4463_SCK     10
 
 // TinyGPS++ Instance
 TinyGPSPlus gps;
@@ -63,8 +63,9 @@ void spi_radio_bus_init() {
 
     ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO));
 
-    ESP_LOGI(TAG, "Si4468 SPI Initialized");
+    ESP_LOGI(TAG, "Si4463 SPI Initialized");
 }
+
 
 // Main Task for GPS Data Processing
 void gps_task(void *pvParameters) {
@@ -87,13 +88,28 @@ void gps_task(void *pvParameters) {
             //send_si4468(gps_buffer);
             si446x_fifo_info(SI446X_CMD_FIFO_INFO_ARG_FIFO_TX_BIT); // Clear fifo ???
             si446x_get_int_status(0u, 0u, 0u); // Clear pending interrupts ???
-            si446x_write_tx_fifo(64, (uint8_t*)gps_buffer);
-            si446x_start_tx(RADIO_CONFIGURATION_DATA_CHANNEL_NUMBER, 0x30, 0x00); // 0x00 somehow sets length, def not correctly
+            si446x_write_tx_fifo(60, (uint8_t*)gps_buffer);
+            si446x_start_tx(RADIO_CONFIGURATION_DATA_CHANNEL_NUMBER, 0x30, 60); // 0x00 len uses PKT_FIELD_X_LENGTH for tx
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000)); // Delay for stability
     }
 }
+
+
+// Radio task for testing transcievers
+void radio_test(void *pvParameters) {
+  while(1) {
+    uint8_t testBuff[8] = {0x07, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+    si446x_fifo_info(SI446X_CMD_FIFO_INFO_ARG_FIFO_TX_BIT); // Clear fifo ???
+    si446x_get_int_status(0u, 0u, 0u); // Clear pending interrupts ???
+    si446x_write_tx_fifo(8, testBuff);
+    si446x_start_tx(RADIO_CONFIGURATION_DATA_CHANNEL_NUMBER, 0x30, 8); // 0x00 len uses PKT_FIELD_X_LENGTH for tx
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+  }  
+}
+
 
 void chipIdEcho() {
     printf("Starting Chip Identification");
@@ -129,7 +145,7 @@ extern "C" void app_main(void)
 {
     chipIdEcho();
 
-    ESP_LOGI(TAG, "Initializing GPS and Si4468 Transceiver");
+    ESP_LOGI(TAG, "Initializing GPS and Si4463 Transceiver");
 
     gps_uart_init();
     spi_radio_bus_init();
@@ -138,5 +154,6 @@ extern "C" void app_main(void)
     si446x_configuration_init(defaultCmds);
     si446x_get_int_status(0u, 0u, 0u);
 
-    xTaskCreate(gps_task, "gps_task", 4096, NULL, 5, NULL);
+    xTaskCreate(radio_test, "radio_test", 2048, NULL, 5, NULL);
+    //xTaskCreate(gps_task, "gps_task", 4096, NULL, 5, NULL);
 }
