@@ -143,6 +143,10 @@ esp_err_t si4468_set_frequency(uint32_t freq_hz)
     err = si4468_send_cmd(freq_cmd, sizeof(freq_cmd));
 
     return err;
+
+{
+    AX_25.cpp() 
+}   
 }
 
 esp_err_t si4468_change_state(uint8_t next_state) {
