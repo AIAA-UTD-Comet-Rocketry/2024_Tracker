@@ -117,7 +117,7 @@ void gps_task(void *pvParameters) {
              * Reduce comment field lengths or split transmission into multiple packets.
              */
             if(APRSencoded.size() >= 64)
-                ESP_LOGI(TAG, "Radio FIFO error, check main file for comments", gps_buffer);
+                ESP_LOGI(TAG, "Radio FIFO error, check main file for comments");
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000)); // Delay for stability

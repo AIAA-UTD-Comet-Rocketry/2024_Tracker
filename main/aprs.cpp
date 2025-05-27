@@ -1,9 +1,10 @@
 #include "aprs.h"
 #include <cstring>
 #include <stdexcept>
+#include "esp_log.h"
 
 // Logging TAG
-static const char *TAG = "ESP32-GPS-SI4468";
+static const char *TAG = "ESP32-APRS-CODEC";
 
 AX25Address AX25Address::from_string(const std::string& str) {
     auto pos = str.find('-');
@@ -66,10 +67,12 @@ std::vector<uint8_t> APRSPacket::encode() const {
 }
 
 APRSPacket APRSPacket::decode(const std::vector<uint8_t>& data) {
-    if (data.size() < 16)
-        throw std::runtime_error("Frame too short");
-
     APRSPacket packet;
+    if (data.size() < 16) {
+        ESP_LOGE(TAG, "Frame too short");
+        return packet;
+    }
+
     size_t offset = 0;
 
     packet.destination = decode_address(&data[offset]);
@@ -81,12 +84,12 @@ APRSPacket APRSPacket::decode(const std::vector<uint8_t>& data) {
         packet.path.push_back(decode_address(&data[offset]));
         offset += 7;
         if (offset + 2 > data.size())
-            throw std::runtime_error("Invalid address block");
+            ESP_LOGE(TAG, "Invalid address block");
     }
 
     // control field
     if (data[offset++] != 0x03 || data[offset++] != 0xF0)
-        throw std::runtime_error("Not a UI frame");
+        ESP_LOGE(TAG, "Not a UI frame");
 
     packet.payload = std::string(data.begin() + offset, data.end());
     return packet;
