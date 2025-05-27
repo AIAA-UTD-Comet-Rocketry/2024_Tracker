@@ -20,14 +20,15 @@
 #include "radio_hal.h"
 #include "si446x_api_lib.h"
 #include "radio_config.h"
+#include "aprs.h"
 
 // Logging TAG
 static const char *TAG = "ESP32-GPS-SI4468";
 
 // GPS UART Configuration
-#define GPS_UART_NUM   UART_NUM_1
-#define GPS_TX_PIN     4  // TX not needed (GPS is sending data)
-#define GPS_RX_PIN     5  // ESP32 RX (Connect to GPS TX)
+#define GPS_UART_NUM   UART_NUM_0
+#define GPS_TX_PIN     21  // TX not needed (GPS is sending data)
+#define GPS_RX_PIN     20  // ESP32 RX (Connect to GPS TX)
 #define BUF_SIZE       1024
 
 // Si4463 SPI Configuration
@@ -35,13 +36,16 @@ static const char *TAG = "ESP32-GPS-SI4468";
 #define SI4463_MISO    1
 #define SI4463_SCK     10
 
-// TinyGPS++ Instance
+// TinyGPS++ instance
 TinyGPSPlus gps;
+
+// APRS codec instance
+APRSPacket packet;
 
 // Function to Initialize GPS UART
 void gps_uart_init() {
     uart_config_t uart_config = {};
-    uart_config.baud_rate = 9600;
+    uart_config.baud_rate = 38400;
     uart_config.data_bits = UART_DATA_8_BITS;
     uart_config.parity = UART_PARITY_DISABLE;
     uart_config.stop_bits = UART_STOP_BITS_1;
@@ -51,6 +55,14 @@ void gps_uart_init() {
     uart_param_config(GPS_UART_NUM, &uart_config);
     uart_set_pin(GPS_UART_NUM, GPS_TX_PIN, GPS_RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 }
+
+
+void aprs_init() {
+    packet.source = AX25Address::from_string("KK7SSP-11");
+    packet.destination = AX25Address::from_string("APRS");
+    packet.path = { AX25Address::from_string("WIDE1-1"), AX25Address::from_string("WIDE2-1") };
+}
+
 
 // Function to Initialize SPI for Si4463
 void spi_radio_bus_init() {
@@ -81,15 +93,31 @@ void gps_task(void *pvParameters) {
         // If new GPS location is available
         if (gps.location.isUpdated()) {
             char gps_buffer[64] = {};
+
+            // Debug string
             snprintf(gps_buffer, sizeof(gps_buffer), "Lat: %.6f, Lon: %.6f",
                      gps.location.lat(), gps.location.lng());
-
             ESP_LOGI(TAG, "GPS: %s", gps_buffer);
-            //send_si4468(gps_buffer);
+
+            // Radio string
+            packet.payload = snprintf(gps_buffer, sizeof(gps_buffer),
+                                      "=%.2fN/%.2fW-Team 317", 
+                                      gps.location.lat(), gps.location.lng());
+
+            std::vector<uint8_t> APRSencoded = packet.encode();
+
             si446x_fifo_info(SI446X_CMD_FIFO_INFO_ARG_FIFO_TX_BIT); // Clear fifo ???
             si446x_get_int_status(0u, 0u, 0u); // Clear pending interrupts ???
-            si446x_write_tx_fifo(60, (uint8_t*)gps_buffer);
-            si446x_start_tx(RADIO_CONFIGURATION_DATA_CHANNEL_NUMBER, 0x30, 60); // 0x00 len uses PKT_FIELD_X_LENGTH for tx
+            si446x_write_tx_fifo(APRSencoded.size(), (uint8_t*)APRSencoded.data());
+            si446x_start_tx(RADIO_CONFIGURATION_DATA_CHANNEL_NUMBER, 0x30, APRSencoded.size()); // 0x00 len uses PKT_FIELD_X_LENGTH for tx
+
+            /*
+             * Without FIFO stitching or interrupt based packet management (ISR/DMA) there
+             * is a limit to SI4463 radio frames containing data payloads less than 64 bytes.
+             * Reduce comment field lengths or split transmission into multiple packets.
+             */
+            if(APRSencoded.size() >= 64)
+                ESP_LOGI(TAG, "Radio FIFO error, check main file for comments", gps_buffer);
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000)); // Delay for stability
@@ -154,6 +182,6 @@ extern "C" void app_main(void)
     si446x_configuration_init(defaultCmds);
     si446x_get_int_status(0u, 0u, 0u);
 
-    xTaskCreate(radio_test, "radio_test", 2048, NULL, 5, NULL);
-    //xTaskCreate(gps_task, "gps_task", 4096, NULL, 5, NULL);
+    //xTaskCreate(radio_test, "radio_test", 2048, NULL, 5, NULL);
+    xTaskCreate(gps_task, "gps_task", 4096, NULL, 5, NULL);
 }
